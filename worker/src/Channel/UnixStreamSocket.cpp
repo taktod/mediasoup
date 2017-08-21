@@ -9,7 +9,8 @@
 #include <cstring> // std::memmove()
 #include <sstream> // std::ostringstream
 extern "C" {
-#include <netstring.h>
+//#include <netstring.h>
+#include "../netstring.h"
 }
 
 namespace Channel

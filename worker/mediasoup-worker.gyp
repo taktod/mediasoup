@@ -4,7 +4,7 @@
     'dependencies':
     [
 #      'deps/jsoncpp/jsoncpp.gyp:jsoncpp',
-      'deps/netstring/netstring.gyp:netstring'
+#      'deps/netstring/netstring.gyp:netstring'
 #      'deps/libuv/uv.gyp:libuv',
 #      'deps/openssl/openssl.gyp:openssl',
 #      'deps/libsrtp/libsrtp.gyp:libsrtp'
@@ -94,6 +94,7 @@
       'src/handles/Timer.cpp',
       'src/handles/UdpSocket.cpp',
       'src/handles/UnixStreamSocket.cpp',
+      'src/netstring.c'
     ],
     'include_dirs':
     [
