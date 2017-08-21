@@ -11,13 +11,13 @@
 #define MS_CLASS "RemoteBitrateEstimatorSingleStream"
 // #define MS_LOG_DEV
 
-#include "RTC/RemoteBitrateEstimator/RemoteBitrateEstimatorSingleStream.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "RTC/RemoteBitrateEstimator/AimdRateControl.hpp"
-#include "RTC/RemoteBitrateEstimator/InterArrival.hpp"
-#include "RTC/RemoteBitrateEstimator/OveruseDetector.hpp"
-#include "RTC/RemoteBitrateEstimator/OveruseEstimator.hpp"
+#include "RemoteBitrateEstimatorSingleStream.hpp"
+#include "../../DepLibUV.hpp"
+#include "../../Logger.hpp"
+#include "AimdRateControl.hpp"
+#include "InterArrival.hpp"
+#include "OveruseDetector.hpp"
+#include "OveruseEstimator.hpp"
 #include <utility> // std::make_pair()
 
 namespace RTC

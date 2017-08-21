@@ -1,8 +1,8 @@
 #define MS_CLASS "Utils::Crypto"
 // #define MS_LOG_DEV
 
-#include "Logger.hpp"
-#include "Utils.hpp"
+#include "../Logger.hpp"
+#include "../Utils.hpp"
 #include <openssl/sha.h>
 
 namespace Utils

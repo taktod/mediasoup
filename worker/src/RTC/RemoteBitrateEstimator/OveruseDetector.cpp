@@ -11,8 +11,8 @@
 #define MS_CLASS "OveruseDetector"
 // #define MS_LOG_DEV
 
-#include "RTC/RemoteBitrateEstimator/OveruseDetector.hpp"
-#include "Logger.hpp"
+#include "OveruseDetector.hpp"
+#include "../../Logger.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>

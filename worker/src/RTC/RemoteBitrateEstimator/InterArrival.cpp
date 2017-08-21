@@ -11,9 +11,9 @@
 #define MS_CLASS "InterArrival"
 // #define MS_LOG_DEV
 
-#include "RTC/RemoteBitrateEstimator/InterArrival.hpp"
-#include "Logger.hpp"
-#include "Utils.hpp" // LatestTimestamp
+#include "InterArrival.hpp"
+#include "../../Logger.hpp"
+#include "../../Utils.hpp" // LatestTimestamp
 #include <algorithm>
 #include <cmath> // std::lround()
 

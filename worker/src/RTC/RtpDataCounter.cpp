@@ -1,8 +1,8 @@
 #define MS_CLASS "RTC::RtpDataCounter"
 // #define MS_LOG_DEV
 
-#include "RTC/RtpDataCounter.hpp"
-#include "Logger.hpp"
+#include "RtpDataCounter.hpp"
+#include "../Logger.hpp"
 #include <cmath> // std::trunc()
 
 namespace RTC

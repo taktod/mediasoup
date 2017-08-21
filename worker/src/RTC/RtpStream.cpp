@@ -3,8 +3,8 @@
 #define MS_CLASS "RTC::RtpStream"
 // #define MS_LOG_DEV
 
-#include "RTC/RtpStream.hpp"
-#include "Logger.hpp"
+#include "RtpStream.hpp"
+#include "../Logger.hpp"
 
 namespace RTC
 {

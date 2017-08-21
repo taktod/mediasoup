@@ -1,10 +1,10 @@
 #define MS_CLASS "Timer"
 // #define MS_LOG_DEV
 
-#include "handles/Timer.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
+#include "Timer.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
 
 /* Static methods for UV callbacks. */
 

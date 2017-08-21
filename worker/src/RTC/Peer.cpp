@@ -1,15 +1,15 @@
 #define MS_CLASS "RTC::Peer"
 // #define MS_LOG_DEV
 
-#include "RTC/Peer.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "RTC/RTCP/CompoundPacket.hpp"
-#include "RTC/RTCP/FeedbackPsRemb.hpp"
-#include "RTC/RTCP/FeedbackRtpNack.hpp"
-#include "RTC/RTCP/Sdes.hpp"
-#include "RTC/RtpDictionaries.hpp"
+#include "Peer.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
+#include "RTCP/CompoundPacket.hpp"
+#include "RTCP/FeedbackPsRemb.hpp"
+#include "RTCP/FeedbackRtpNack.hpp"
+#include "RTCP/Sdes.hpp"
+#include "RtpDictionaries.hpp"
 
 namespace RTC
 {

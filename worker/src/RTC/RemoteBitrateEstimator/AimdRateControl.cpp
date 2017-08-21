@@ -11,9 +11,9 @@
 #define MS_CLASS "AimdRateControl"
 // #define MS_LOG_DEV
 
-#include "RTC/RemoteBitrateEstimator/AimdRateControl.hpp"
-#include "Logger.hpp"
-#include "RTC/RemoteBitrateEstimator/RemoteBitrateEstimator.hpp"
+#include "AimdRateControl.hpp"
+#include "../../Logger.hpp"
+#include "RemoteBitrateEstimator.hpp"
 #include <algorithm>
 #include <cmath> // std::lround()
 

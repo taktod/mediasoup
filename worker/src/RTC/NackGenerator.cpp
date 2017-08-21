@@ -1,9 +1,9 @@
 #define MS_CLASS "RTC::NackGenerator"
 // #define MS_LOG_DEV
 
-#include "RTC/NackGenerator.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
+#include "NackGenerator.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
 
 namespace RTC
 {

@@ -1,11 +1,11 @@
 #define MS_CLASS "TcpConnection"
 // #define MS_LOG_DEV
 
-#include "handles/TcpConnection.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "Utils.hpp"
+#include "TcpConnection.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
+#include "../Utils.hpp"
 #include <cstdlib> // std::malloc(), std::free()
 #include <cstring> // std::memcpy()
 

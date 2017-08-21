@@ -1,10 +1,10 @@
 #define MS_CLASS "RTC::RtpCodecMime"
 // #define MS_LOG_DEV
 
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "Utils.hpp"
-#include "RTC/RtpDictionaries.hpp"
+#include "../../Logger.hpp"
+#include "../../MediaSoupError.hpp"
+#include "../../Utils.hpp"
+#include "../RtpDictionaries.hpp"
 
 namespace RTC
 {

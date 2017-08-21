@@ -11,10 +11,10 @@
 #define MS_CLASS "RemoteBitrateEstimatorAbsSendTime"
 // #define MS_LOG_DEV
 
-#include "RTC/RemoteBitrateEstimator/RemoteBitrateEstimatorAbsSendTime.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "RTC/RemoteBitrateEstimator/RemoteBitrateEstimator.hpp"
+#include "RemoteBitrateEstimatorAbsSendTime.hpp"
+#include "../../DepLibUV.hpp"
+#include "../../Logger.hpp"
+#include "RemoteBitrateEstimator.hpp"
 #include <algorithm>
 #include <cmath>
 

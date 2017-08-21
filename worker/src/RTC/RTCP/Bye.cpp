@@ -1,9 +1,9 @@
 #define MS_CLASS "RTC::RTCP::Bye"
 // #define MS_LOG_DEV
 
-#include "RTC/RTCP/Bye.hpp"
-#include "Logger.hpp"
-#include "Utils.hpp"
+#include "Bye.hpp"
+#include "../../Logger.hpp"
+#include "../../Utils.hpp"
 #include <cstring>
 
 namespace RTC

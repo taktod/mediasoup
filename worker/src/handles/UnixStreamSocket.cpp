@@ -6,10 +6,10 @@
 #define MS_CLASS "UnixStreamSocket"
 // #define MS_LOG_DEV
 
-#include "handles/UnixStreamSocket.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
+#include "UnixStreamSocket.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
 #include <cstdlib> // std::malloc(), std::free()
 #include <cstring> // std::memcpy()
 

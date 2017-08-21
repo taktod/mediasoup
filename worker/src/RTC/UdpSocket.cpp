@@ -1,12 +1,12 @@
 #define MS_CLASS "RTC::UdpSocket"
 // #define MS_LOG_DEV
 
-#include "RTC/UdpSocket.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "Settings.hpp"
-#include "Utils.hpp"
+#include "UdpSocket.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
+#include "../Settings.hpp"
+#include "../Utils.hpp"
 #include <string>
 
 /* Static methods for UV callbacks. */

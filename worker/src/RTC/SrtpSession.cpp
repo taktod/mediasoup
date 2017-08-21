@@ -1,10 +1,10 @@
 #define MS_CLASS "RTC::SrtpSession"
 // #define MS_LOG_DEV
 
-#include "RTC/SrtpSession.hpp"
-#include "DepLibSRTP.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
+#include "SrtpSession.hpp"
+#include "../DepLibSRTP.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
 #include <cstring> // std::memset(), std::memcpy()
 
 namespace RTC

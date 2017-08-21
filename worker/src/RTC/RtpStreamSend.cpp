@@ -1,10 +1,10 @@
 #define MS_CLASS "RTC::RtpStreamSend"
 // #define MS_LOG_DEV
 
-#include "RTC/RtpStreamSend.hpp"
-#include "DepLibUV.hpp"
-#include "Logger.hpp"
-#include "Utils.hpp"
+#include "RtpStreamSend.hpp"
+#include "../DepLibUV.hpp"
+#include "../Logger.hpp"
+#include "../Utils.hpp"
 
 namespace RTC
 {

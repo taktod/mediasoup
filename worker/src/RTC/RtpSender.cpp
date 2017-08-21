@@ -1,12 +1,12 @@
 #define MS_CLASS "RTC::RtpSender"
 // #define MS_LOG_DEV
 
-#include "RTC/RtpSender.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "Utils.hpp"
-#include "RTC/RTCP/FeedbackRtpNack.hpp"
-#include "RTC/RTCP/SenderReport.hpp"
+#include "RtpSender.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
+#include "../Utils.hpp"
+#include "RTCP/FeedbackRtpNack.hpp"
+#include "RTCP/SenderReport.hpp"
 #include <vector>
 
 namespace RTC

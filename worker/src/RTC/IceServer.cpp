@@ -3,8 +3,8 @@
 
 #include <utility>
 
-#include "Logger.hpp"
-#include "RTC/IceServer.hpp"
+#include "../Logger.hpp"
+#include "IceServer.hpp"
 
 namespace RTC
 {
@@ -142,7 +142,7 @@ namespace RTC
 				}
 
 				// NOTE: Should be rejected with 487, but this makes Chrome happy:
-				//   https://bugs.chromium.org/p/webrtc/issues/detail?id=7478
+				//   https://bugs.chromium.org/p/webissues/detail?id=7478
 				// The remote peer must be ICE controlling.
 				// if (msg->GetIceControlled())
 				// {

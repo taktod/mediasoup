@@ -1,11 +1,11 @@
 #define MS_CLASS "RTC::DtlsTransport"
 // #define MS_LOG_DEV
 
-#include "RTC/DtlsTransport.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
-#include "Settings.hpp"
-#include "Utils.hpp"
+#include "DtlsTransport.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
+#include "../Settings.hpp"
+#include "../Utils.hpp"
 #include <openssl/asn1.h>
 #include <openssl/bn.h>
 #include <openssl/err.h>

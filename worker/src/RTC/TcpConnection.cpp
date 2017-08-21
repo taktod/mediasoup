@@ -1,9 +1,9 @@
 #define MS_CLASS "RTC::TcpConnection"
 // #define MS_LOG_DEV
 
-#include "RTC/TcpConnection.hpp"
-#include "Logger.hpp"
-#include "Utils.hpp"
+#include "TcpConnection.hpp"
+#include "../Logger.hpp"
+#include "../Utils.hpp"
 #include <cstring> // std::memmove()
 
 namespace RTC

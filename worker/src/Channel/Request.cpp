@@ -1,9 +1,9 @@
 #define MS_CLASS "Channel::Request"
 // #define MS_LOG_DEV
 
-#include "Channel/Request.hpp"
-#include "Logger.hpp"
-#include "MediaSoupError.hpp"
+#include "Request.hpp"
+#include "../Logger.hpp"
+#include "../MediaSoupError.hpp"
 
 namespace Channel
 {

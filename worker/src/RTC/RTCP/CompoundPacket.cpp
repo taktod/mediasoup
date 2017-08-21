@@ -1,8 +1,8 @@
 #define MS_CLASS "RTC::RTCP::CompoundPacket"
 // #define MS_LOG_DEV
 
-#include "RTC/RTCP/CompoundPacket.hpp"
-#include "Logger.hpp"
+#include "CompoundPacket.hpp"
+#include "../../Logger.hpp"
 
 namespace RTC
 {
