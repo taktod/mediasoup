@@ -3,11 +3,11 @@
     'type': 'executable',
     'dependencies':
     [
-      'deps/jsoncpp/jsoncpp.gyp:jsoncpp',
-      'deps/netstring/netstring.gyp:netstring',
-      'deps/libuv/uv.gyp:libuv',
-      'deps/openssl/openssl.gyp:openssl',
-      'deps/libsrtp/libsrtp.gyp:libsrtp'
+#      'deps/jsoncpp/jsoncpp.gyp:jsoncpp',
+      'deps/netstring/netstring.gyp:netstring'
+#      'deps/libuv/uv.gyp:libuv',
+#      'deps/openssl/openssl.gyp:openssl',
+#      'deps/libsrtp/libsrtp.gyp:libsrtp'
     ],
     'sources':
     [
@@ -171,7 +171,24 @@
     ],
     'include_dirs':
     [
-      'include'
+      'include',
+      '/usr/local/include',
+      '/usr/local/opt/openssl/include'
+    ],
+    "library_dirs": [
+      "/usr/local/lib",
+      "/usr/local/opt/openssl/lib"
+    ],
+    "libraries": [
+      '-lssl',
+      '-lcrypto',
+      '-lz',
+      '-ljsoncpp',
+      '-luv',
+      '-lpthread',
+      '-ldl',
+      '-lsrtp2',
+      '-lpcap'
     ],
     'conditions':
     [
