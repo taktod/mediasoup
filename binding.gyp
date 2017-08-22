@@ -12,6 +12,7 @@
         'worker/src/DepLibSRTP.cpp',
         'worker/src/DepLibUV.cpp',
         'worker/src/DepOpenSSL.cpp',
+        'worker/src/DepTimer.cpp',
         'worker/src/Logger.cpp',
         'worker/src/Loop.cpp',
         'worker/src/Settings.cpp',
