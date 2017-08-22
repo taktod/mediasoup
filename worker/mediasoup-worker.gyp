@@ -15,6 +15,7 @@
       'src/DepLibSRTP.cpp',
       'src/DepLibUV.cpp',
       'src/DepOpenSSL.cpp',
+      'src/DepTimer.cpp',
       'src/Logger.cpp',
       'src/Loop.cpp',
       'src/Settings.cpp',

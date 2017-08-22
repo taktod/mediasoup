@@ -2,7 +2,7 @@
 // #define MS_LOG_DEV
 
 #include "RtpStreamRecv.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "../Logger.hpp"
 
 namespace RTC
@@ -160,7 +160,7 @@ namespace RTC
 		if (this->lastSrReceived != 0u)
 		{
 			// Get delay in milliseconds.
-			auto delayMs = static_cast<uint32_t>(DepLibUV::GetTime() - this->lastSrReceived);
+			auto delayMs = static_cast<uint32_t>(DepTimer::GetTime() - this->lastSrReceived);
 			// Express delay in units of 1/65536 seconds.
 			uint32_t dlsr = (delayMs / 1000) << 16;
 
@@ -181,7 +181,7 @@ namespace RTC
 	{
 		MS_TRACE();
 
-		this->lastSrReceived  = DepLibUV::GetTime();
+		this->lastSrReceived  = DepTimer::GetTime();
 		this->lastSrTimestamp = report->GetNtpSec() << 16;
 		this->lastSrTimestamp += report->GetNtpFrac() >> 16;
 	}
@@ -208,7 +208,7 @@ namespace RTC
 			return;
 
 		auto transit =
-		    static_cast<int>(DepLibUV::GetTime() - (rtpTimestamp * 1000 / this->params.clockRate));
+		    static_cast<int>(DepTimer::GetTime() - (rtpTimestamp * 1000 / this->params.clockRate));
 		int d = transit - this->transit;
 
 		this->transit = transit;

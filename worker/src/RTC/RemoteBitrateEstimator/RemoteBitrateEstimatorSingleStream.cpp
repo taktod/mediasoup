@@ -12,7 +12,7 @@
 // #define MS_LOG_DEV
 
 #include "RemoteBitrateEstimatorSingleStream.hpp"
-#include "../../DepLibUV.hpp"
+#include "../../DepTimer.hpp"
 #include "../../Logger.hpp"
 #include "AimdRateControl.hpp"
 #include "InterArrival.hpp"
@@ -35,7 +35,7 @@ namespace RTC
 
 		uint32_t ssrc         = packet.GetSsrc();
 		uint32_t rtpTimestamp = packet.GetTimestamp() + transmissionTimeOffset;
-		int64_t nowMs         = DepLibUV::GetTime();
+		int64_t nowMs         = DepTimer::GetTime();
 
 		auto it = this->overuseDetectors.find(ssrc);
 		if (it == this->overuseDetectors.end())
@@ -116,7 +116,7 @@ namespace RTC
 			return 0;
 
 		// MS_ASSERT(this->processIntervalMs > 0);
-		return this->lastProcessTime + this->processIntervalMs - DepLibUV::GetTime();
+		return this->lastProcessTime + this->processIntervalMs - DepTimer::GetTime();
 	}
 
 	void RemoteBitrateEstimatorSingleStream::UpdateEstimate(int64_t nowMs)

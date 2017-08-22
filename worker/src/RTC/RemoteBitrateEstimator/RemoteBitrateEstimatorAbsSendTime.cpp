@@ -12,7 +12,7 @@
 // #define MS_LOG_DEV
 
 #include "RemoteBitrateEstimatorAbsSendTime.hpp"
-#include "../../DepLibUV.hpp"
+#include "../../DepTimer.hpp"
 #include "../../Logger.hpp"
 #include "RemoteBitrateEstimator.hpp"
 #include <algorithm>
@@ -254,7 +254,7 @@ namespace RTC
 		// so wrapping works properly.
 		uint32_t timestamp = sendTime24bits << AbsSendTimeInterArrivalUpshift;
 		int64_t sendTimeMs = int64_t{ timestamp } * TimestampToMs;
-		int64_t nowMs      = DepLibUV::GetTime();
+		int64_t nowMs      = DepTimer::GetTime();
 		// TODO(holmer): SSRCs are only needed for REMB, should be broken out from
 		// here.
 		// Check if incoming bitrate estimate is valid, and if it needs to be reset.

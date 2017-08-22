@@ -2,7 +2,7 @@
 #define MS_RTC_RTP_DATA_COUNTER_HPP
 
 #include "../common.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "RtpPacket.hpp"
 
 namespace RTC
@@ -66,7 +66,7 @@ namespace RTC
 	inline RateCalculator::RateCalculator(size_t windowSize, float scale)
 	    : windowSize(windowSize), scale(scale)
 	{
-		uint64_t now = DepLibUV::GetTime();
+		uint64_t now = DepTimer::GetTime();
 
 		this->Reset(now);
 	}

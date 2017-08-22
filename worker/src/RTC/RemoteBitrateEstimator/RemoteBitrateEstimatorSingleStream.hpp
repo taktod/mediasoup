@@ -114,8 +114,8 @@ namespace RTC
 
 	inline void RemoteBitrateEstimatorSingleStream::Process()
 	{
-		UpdateEstimate(DepLibUV::GetTime());
-		this->lastProcessTime = DepLibUV::GetTime();
+		UpdateEstimate(DepTimer::GetTime());
+		this->lastProcessTime = DepTimer::GetTime();
 	}
 
 	inline void RemoteBitrateEstimatorSingleStream::OnRttUpdate(int64_t avgRttMs, int64_t /*maxRttMs*/)

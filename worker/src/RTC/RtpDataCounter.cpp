@@ -80,7 +80,7 @@ namespace RTC
 
 	void RtpDataCounter::Update(RTC::RtpPacket* packet)
 	{
-		uint64_t now = DepLibUV::GetTime();
+		uint64_t now = DepTimer::GetTime();
 
 		this->packets++;
 		this->bytes += packet->GetSize();

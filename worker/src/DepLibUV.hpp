@@ -2,6 +2,7 @@
 #define MS_DEP_LIBUV_HPP
 
 #include "common.hpp"
+#include "DepTimer.hpp"
 #include <uv.h>
 
 class DepLibUV
@@ -27,7 +28,8 @@ inline uv_loop_t* DepLibUV::GetLoop()
 
 inline uint64_t DepLibUV::GetTime()
 {
-	return uv_now(DepLibUV::loop);
+//	return uv_now(DepLibUV::loop);
+	return DepTimer::GetTime();
 }
 
 #endif

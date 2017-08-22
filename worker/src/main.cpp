@@ -5,6 +5,7 @@
 #include "DepLibSRTP.hpp"
 #include "DepLibUV.hpp"
 #include "DepOpenSSL.hpp"
+#include "DepTimer.hpp"
 #include "Logger.hpp"
 #include "Loop.hpp"
 #include "MediaSoupError.hpp"
@@ -45,6 +46,7 @@ int main(int argc, char* argv[])
 
 	// Initialize libuv stuff (we need it for the Channel).
 	DepLibUV::ClassInit();
+	DepTimer::ClassInit();
 
 	// Set the Channel socket (this will be handled and deleted by the Loop).
 	auto* channel = new Channel::UnixStreamSocket(channelFd);

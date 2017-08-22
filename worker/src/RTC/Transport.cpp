@@ -2,7 +2,7 @@
 // #define MS_LOG_DEV
 
 #include "Transport.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "../Logger.hpp"
 #include "../MediaSoupError.hpp"
 #include "../Settings.hpp"
@@ -871,7 +871,7 @@ namespace RTC
 			if (packet->ReadAbsSendTime(&absSendTime))
 			{
 				this->remoteBitrateEstimator->IncomingPacket(
-				    DepLibUV::GetTime(), packet->GetPayloadLength(), *packet, absSendTime);
+				    DepTimer::GetTime(), packet->GetPayloadLength(), *packet, absSendTime);
 			}
 		}
 
@@ -1216,7 +1216,7 @@ namespace RTC
 		MS_TRACE();
 
 		uint32_t effectiveBitrate;
-		uint64_t now = DepLibUV::GetTime();
+		uint64_t now = DepTimer::GetTime();
 
 		// Limit bitrate if requested via API.
 		if (this->maxBitrate != 0u)

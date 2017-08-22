@@ -2,7 +2,7 @@
 // #define MS_LOG_DEV
 
 #include "Peer.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "../Logger.hpp"
 #include "../MediaSoupError.hpp"
 #include "RTCP/CompoundPacket.hpp"
@@ -1164,7 +1164,7 @@ namespace RTC
 	void Peer::OnTimer(Timer* /*timer*/)
 	{
 		uint64_t interval = RTC::RTCP::MaxVideoIntervalMs;
-		uint32_t now      = DepLibUV::GetTime();
+		uint32_t now      = DepTimer::GetTime();
 
 		this->SendRtcp(now);
 

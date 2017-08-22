@@ -2,7 +2,7 @@
 // #define MS_LOG_DEV
 
 #include "RtpStreamSend.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "../Logger.hpp"
 #include "../Utils.hpp"
 
@@ -68,7 +68,7 @@ namespace RTC
 		this->receivedBytes += packet->GetPayloadLength();
 
 		// Record current time and RTP timestamp.
-		this->lastPacketTimeMs       = DepLibUV::GetTime();
+		this->lastPacketTimeMs       = DepTimer::GetTime();
 		this->lastPacketRtpTimestamp = packet->GetTimestamp();
 
 		return true;
@@ -161,7 +161,7 @@ namespace RTC
 		}
 
 		// Look for each requested packet.
-		uint64_t now   = DepLibUV::GetTime();
+		uint64_t now   = DepTimer::GetTime();
 		uint32_t rtt   = (this->rtt != 0u ? this->rtt : DefaultRtt);
 		uint32_t seq32 = firstSeq32;
 		bool requested{ true };

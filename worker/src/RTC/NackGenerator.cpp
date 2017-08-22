@@ -2,7 +2,7 @@
 // #define MS_LOG_DEV
 
 #include "NackGenerator.hpp"
-#include "../DepLibUV.hpp"
+#include "../DepTimer.hpp"
 #include "../Logger.hpp"
 
 namespace RTC
@@ -141,7 +141,7 @@ namespace RTC
 
 	std::vector<uint16_t> NackGenerator::GetNackBatch(NackFilter filter)
 	{
-		uint64_t now = DepLibUV::GetTime();
+		uint64_t now = DepTimer::GetTime();
 		std::vector<uint16_t> nackBatch;
 		auto it = this->nackList.begin();
 
