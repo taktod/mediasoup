@@ -57,7 +57,6 @@
   "scripts": {
     "rebuild": "node-gyp rebuild",
     "build": "node-gyp build",
-    "test": "gulp test",
-    "postinstall": "make Release"
+    "test": "gulp test"
   }
 }
