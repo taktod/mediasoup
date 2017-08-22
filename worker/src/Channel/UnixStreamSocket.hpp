@@ -1,6 +1,7 @@
 #ifndef MS_CHANNEL_UNIX_STREAM_SOCKET_HPP
 #define MS_CHANNEL_UNIX_STREAM_SOCKET_HPP
 
+#include <nan.h>
 #include "../common.hpp"
 #include "Request.hpp"
 #include "../handles/UnixStreamSocket.hpp"
@@ -10,6 +11,12 @@ namespace Channel
 {
 	class UnixStreamSocket : public ::UnixStreamSocket
 	{
+	public:
+		static void NodeInit(v8::Local<v8::Object> target);
+		static NAN_METHOD(SetCallback);
+		static NAN_METHOD(Request);
+		static void setChannel(UnixStreamSocket *channel);
+	private:
 	public:
 		class Listener
 		{
@@ -34,6 +41,7 @@ namespace Channel
 	public:
 		void UserOnUnixStreamRead() override;
 		void UserOnUnixStreamSocketClosed(bool isClosedByPeer) override;
+		void NodeRequestRead(const char *data, size_t data_size);
 
 	private:
 		// Passed by argument.

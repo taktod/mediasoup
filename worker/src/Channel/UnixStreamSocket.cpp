@@ -12,9 +12,50 @@ extern "C" {
 //#include <netstring.h>
 #include "../netstring.h"
 }
+static bool isCallbackSet_ = false;
+static Nan::Persistent<v8::Object> callback_;
+static Channel::UnixStreamSocket *channel_ = nullptr;
+
+// 今回はこいつ自身を改良してしまうか・・・
+// その方がはやそう。
+// サイズとかどうでもいい。
+// まずinitでcallbackを登録可能にしておかなければならない。
+// このcallbackをresponseがきたら、返すのに利用するという具合で
+// あとはrequestという形でnode側からこちら側に要求がある。
+// というわけでこの２つだけ実装しておかなければいけないか・・・
 
 namespace Channel
 {
+	void UnixStreamSocket::setChannel(Channel::UnixStreamSocket *channel) {
+		channel_ = channel;
+	}
+	// その他追記したもの。
+	void UnixStreamSocket::NodeInit(v8::Local<v8::Object> target) {
+		// ここでここがcallされる。
+		// targetに2つの関数を登録しておく
+		Nan::Set(target, Nan::New("setCallback").ToLocalChecked(), Nan::GetFunction(Nan::New<v8::FunctionTemplate>(SetCallback)).ToLocalChecked());
+		Nan::Set(target, Nan::New("request").ToLocalChecked(), Nan::GetFunction(Nan::New<v8::FunctionTemplate>(Request)).ToLocalChecked());
+	}
+	NAN_METHOD(UnixStreamSocket::SetCallback) {
+		if(info.Length() == 1) {
+			// とりあえずセットしとく
+			isCallbackSet_ = true;
+			callback_.Reset(info[0]->ToObject());
+		}
+	}
+	// これ・・・ここにいれない方がしあわせかね。
+	NAN_METHOD(UnixStreamSocket::Request) {
+		puts("requestが呼ばれた");
+		// この読み込まれたデータを送らなければならない。
+		if(channel_ != nullptr) {
+			// ここに対してメッセージを送り込む必要がある模様
+	    v8::Local<v8::Value> binary   = info[0];
+      void   *data      = (void *)node::Buffer::Data(binary->ToObject());
+      size_t  data_size = node::Buffer::Length(binary->ToObject());
+			channel_->NodeRequestRead((const char *)data, data_size);
+		}
+	}
+
 	/* Static. */
 
 	// netstring length for a 65536 bytes payload.
@@ -113,7 +154,18 @@ namespace Channel
 
 		nsLen = nsNumLen + nsPayloadLen + 2;
 
-		Write(WriteBuffer, nsLen);
+// このデータをcallbackで応答しなければならない。
+		if(isCallbackSet_) {
+			// callbackをつかって応答しなければならない。
+			Nan::HandleScope scope;
+			Nan::Callback callback(Nan::New(callback_).As<v8::Function>());
+		  v8::Local<v8::Object> binary   = Nan::CopyBuffer((char *)WriteBuffer, nsLen).ToLocalChecked();
+  		v8::Local<v8::Value>  args[]   = {
+		    binary
+  		};
+  		callback.Call(1, args);
+		}
+//		Write(WriteBuffer, nsLen);
 	}
 
 	void UnixStreamSocket::SendLog(char* nsPayload, size_t nsPayloadLen)
@@ -149,8 +201,17 @@ namespace Channel
 		}
 
 		nsLen = nsNumLen + nsPayloadLen + 2;
-
-		Write(WriteBuffer, nsLen);
+		if(isCallbackSet_) {
+			// callbackをつかって応答しなければならない。
+			Nan::HandleScope scope;
+			Nan::Callback callback(Nan::New(callback_).As<v8::Function>());
+		  v8::Local<v8::Object> binary   = Nan::CopyBuffer((char *)WriteBuffer, nsLen).ToLocalChecked();
+  		v8::Local<v8::Value>  args[]   = {
+		    binary
+  		};
+  		callback.Call(1, args);
+		}
+//		Write(WriteBuffer, nsLen);
 	}
 
 	void UnixStreamSocket::SendBinary(const uint8_t* nsPayload, size_t nsPayloadLen)
@@ -184,8 +245,103 @@ namespace Channel
 		}
 
 		nsLen = nsNumLen + nsPayloadLen + 2;
+		if(isCallbackSet_) {
+			// callbackをつかって応答しなければならない。
+			Nan::HandleScope scope;
+			Nan::Callback callback(Nan::New(callback_).As<v8::Function>());
+		  v8::Local<v8::Object> binary   = Nan::CopyBuffer((char *)WriteBuffer, nsLen).ToLocalChecked();
+  		v8::Local<v8::Value>  args[]   = {
+		    binary
+  		};
+  		callback.Call(1, args);
+		}
+//		Write(WriteBuffer, nsLen);
+	}
 
-		Write(WriteBuffer, nsLen);
+	void UnixStreamSocket::NodeRequestRead(const char *data, size_t data_size) {
+		// node側からデータがきた場合の動作
+		MS_TRACE_STD();
+
+		char* jsonStart = nullptr;
+		size_t jsonLen;
+		int nsRet = netstring_read(
+			(char *)data, data_size, &jsonStart, &jsonLen);
+
+		if (nsRet != 0)
+		{
+			switch (nsRet)
+			{
+				case NETSTRING_ERROR_TOO_SHORT:
+					// Check if the buffer is full.
+					MS_ERROR_STD("NETSTRING_ERROR_TOO_SHORT");
+					// Otherwise the buffer is not full, just wait.
+
+					// Exit the parsing loop.
+					return;
+
+				case NETSTRING_ERROR_TOO_LONG:
+					MS_ERROR_STD("NETSTRING_ERROR_TOO_LONG");
+					break;
+
+				case NETSTRING_ERROR_NO_COLON:
+					MS_ERROR_STD("NETSTRING_ERROR_NO_COLON");
+					break;
+
+				case NETSTRING_ERROR_NO_COMMA:
+					MS_ERROR_STD("NETSTRING_ERROR_NO_COMMA");
+					break;
+
+				case NETSTRING_ERROR_LEADING_ZERO:
+					MS_ERROR_STD("NETSTRING_ERROR_LEADING_ZERO");
+					break;
+
+				case NETSTRING_ERROR_NO_LENGTH:
+					MS_ERROR_STD("NETSTRING_ERROR_NO_LENGTH");
+					break;
+			}
+
+			// Error, so reset and exit the parsing loop.
+			this->msgStart      = 0;
+			this->bufferDataLen = 0;
+
+			return;
+		}
+
+		// If here it means that jsonStart points to the beginning of a JSON string
+		// with jsonLen bytes length, so recalculate readLen.
+//		readLen = reinterpret_cast<const uint8_t*>(jsonStart) - (this->buffer + this->msgStart) +
+//							jsonLen + 1;
+
+		Json::Value json;
+		std::string jsonParseError;
+
+		if (this->jsonReader->parse(
+						(const char*)jsonStart, (const char*)jsonStart + jsonLen, &json, &jsonParseError))
+		{
+			Channel::Request* request = nullptr;
+
+			try
+			{
+				request = new Channel::Request(this, json);
+			}
+			catch (const MediaSoupError& error)
+			{
+				MS_ERROR_STD("discarding wrong Channel request");
+			}
+
+			if (request != nullptr)
+			{
+				// Notify the listener.
+				this->listener->OnChannelRequest(this, request);
+
+				// Delete the Request.
+				delete request;
+			}
+		}
+		else
+		{
+			MS_ERROR_STD("JSON parsing error: %s", jsonParseError.c_str());
+		}
 	}
 
 	void UnixStreamSocket::UserOnUnixStreamRead()

@@ -31,9 +31,9 @@ Loop::Loop(Channel::UnixStreamSocket* channel) : channel(channel)
 	this->signalsHandler->AddSignal(SIGINT, "INT");
 	this->signalsHandler->AddSignal(SIGTERM, "TERM");
 
-	MS_DEBUG_DEV("starting libuv loop");
-	DepLibUV::RunLoop();
-	MS_DEBUG_DEV("libuv loop ended");
+//	MS_DEBUG_DEV("starting libuv loop");
+//	DepLibUV::RunLoop();
+//	MS_DEBUG_DEV("libuv loop ended");
 }
 
 Loop::~Loop()
