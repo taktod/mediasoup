@@ -23,7 +23,8 @@ private:
 
 inline uv_loop_t* DepLibUV::GetLoop()
 {
-	return DepLibUV::loop;
+	return uv_default_loop();
+//	return DepLibUV::loop;
 }
 
 inline uint64_t DepLibUV::GetTime()
