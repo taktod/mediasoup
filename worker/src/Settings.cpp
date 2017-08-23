@@ -43,6 +43,7 @@ void Settings::SetConfiguration(int argc, char* argv[])
 {
 	MS_TRACE();
 
+MS_DUMP("hogehoge hello.");
 	/* Set default configuration. */
 
 	SetDefaultRtcIP(AF_INET);

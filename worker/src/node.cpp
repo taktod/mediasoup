@@ -36,26 +36,31 @@ static void exitWithError();
 static Loop *loop = nullptr;
 
 static NAN_METHOD(NodeInit) {
+	puts("nodeの初期化やってみます。");
   // nodeの初期化
   // 必要な初期化を実施すればいいわけだが・・・
   int argc = 2;
   char* argv[2];
-  std::string id= std::string("ttLib");
+  std::string id= std::string("blxvigly#1");
   argv[1] = (char *)id.c_str();
-  int channelFd = 12345; // これはめっちゃ適当
+  int channelFd = 3; // これはめっちゃ適当(これは3みたい)
+	// このchannelFdは適当につくるのではなく、node側と同じものを準備しなければならないのか・・・
 
   // これはcallしなくていい、すでにnodeの動作でcall済みのはず
 //  DepLibUV::ClassInit();
+	puts("timerを初期化します");
 	DepTimer::ClassInit();
 	// Set the Channel socket (this will be handled and deleted by the Loop).
 	auto* channel = new Channel::UnixStreamSocket(channelFd);
 
+	puts("channelを登録しておきます。");
   Channel::UnixStreamSocket::setChannel(channel);
 	// Initialize the Logger.
 	Logger::Init(id, channel);
 	// Setup the configuration.
 	try
 	{
+		puts("setConfigurationを実施したいと思います。");
 		Settings::SetConfiguration(argc, argv);
 	}
 	catch (const MediaSoupError& error)

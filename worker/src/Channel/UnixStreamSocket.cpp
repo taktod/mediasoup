@@ -37,7 +37,9 @@ namespace Channel
 		Nan::Set(target, Nan::New("request").ToLocalChecked(), Nan::GetFunction(Nan::New<v8::FunctionTemplate>(Request)).ToLocalChecked());
 	}
 	NAN_METHOD(UnixStreamSocket::SetCallback) {
+			puts("callbackをセットしておきます。");
 		if(info.Length() == 1) {
+			puts("callbackをセットできそうです。");
 			// とりあえずセットしとく
 			isCallbackSet_ = true;
 			callback_.Reset(info[0]->ToObject());
@@ -170,6 +172,7 @@ namespace Channel
 
 	void UnixStreamSocket::SendLog(char* nsPayload, size_t nsPayloadLen)
 	{
+		puts("sendLog is called.");
 		if (this->closed)
 			return;
 
@@ -200,8 +203,10 @@ namespace Channel
 			WriteBuffer[nsNumLen + nsPayloadLen + 1] = ',';
 		}
 
+		puts("ここまできてる");
 		nsLen = nsNumLen + nsPayloadLen + 2;
 		if(isCallbackSet_) {
+			puts("callbackがsetされているので、実行する");
 			// callbackをつかって応答しなければならない。
 			Nan::HandleScope scope;
 			Nan::Callback callback(Nan::New(callback_).As<v8::Function>());
@@ -485,6 +490,7 @@ namespace Channel
 	void UnixStreamSocket::UserOnUnixStreamSocketClosed(bool isClosedByPeer)
 	{
 		MS_TRACE_STD();
+		puts("UserOnUnixStreamSocketがcallされた。");
 
 		this->closed = true;
 
