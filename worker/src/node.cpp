@@ -39,10 +39,38 @@ static NAN_METHOD(NodeInit) {
 	puts("nodeの初期化やってみます。");
   // nodeの初期化
   // 必要な初期化を実施すればいいわけだが・・・
-  int argc = 2;
-  char* argv[2];
+/*'iquhjmgy#1',
+  '--logLevel=debug',
+  '--logTag=info',
+  '--logTag=rtp',
+  '--logTag=rtcp',
+  '--logTag=rtx',
+  '--rtcIPv4=true',
+  '--rtcIPv6=true',
+  '--rtcMinPort=40000',
+  '--rtcMaxPort=49999*/
+	  int argc = 11;
+  char* argv[11];
   std::string id= std::string("blxvigly#1");
   argv[1] = (char *)id.c_str();
+  std::string level= std::string("--logLevel=debug");
+  argv[2] = (char *)level.c_str();
+  std::string tag1= std::string("--logTag=info");
+  argv[3] = (char *)tag1.c_str();
+  std::string tag2= std::string("--logTag=rtp");
+  argv[4] = (char *)tag2.c_str();
+  std::string tag3= std::string("--logTag=rtcp");
+  argv[5] = (char *)tag3.c_str();
+  std::string tag4= std::string("--logTag=rtx");
+  argv[6] = (char *)tag4.c_str();
+  std::string ip1= std::string("--rtcIPv4=true");
+  argv[7] = (char *)ip1.c_str();
+  std::string ip2= std::string("--rtcIPv6=true");
+  argv[8] = (char *)ip2.c_str();
+  std::string minport= std::string("--rtcMinPort=40000");
+  argv[9] = (char *)minport.c_str();
+  std::string maxport= std::string("--rtcMaxPort=49999");
+  argv[10] = (char *)maxport.c_str();
   int channelFd = 3; // これはめっちゃ適当(これは3みたい)
 	// このchannelFdは適当につくるのではなく、node側と同じものを準備しなければならないのか・・・
 
