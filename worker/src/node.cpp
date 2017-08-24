@@ -36,7 +36,6 @@ static void exitWithError();
 static Loop *loop = nullptr;
 
 static NAN_METHOD(NodeInit) {
-	puts("nodeの初期化やってみます。");
   // nodeの初期化
   // 必要な初期化を実施すればいいわけだが・・・
 /*'iquhjmgy#1',
@@ -76,19 +75,16 @@ static NAN_METHOD(NodeInit) {
 
   // これはcallしなくていい、すでにnodeの動作でcall済みのはず
 //  DepLibUV::ClassInit();
-	puts("timerを初期化します");
 	DepTimer::ClassInit();
 	// Set the Channel socket (this will be handled and deleted by the Loop).
 	auto* channel = new Channel::UnixStreamSocket(channelFd);
 
-	puts("channelを登録しておきます。");
   Channel::UnixStreamSocket::setChannel(channel);
 	// Initialize the Logger.
 	Logger::Init(id, channel);
 	// Setup the configuration.
 	try
 	{
-		puts("setConfigurationを実施したいと思います。");
 		Settings::SetConfiguration(argc, argv);
 	}
 	catch (const MediaSoupError& error)

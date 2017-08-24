@@ -17,6 +17,7 @@
     "new": "cpp",
     "typeinfo": "cpp",
     "__nullptr": "cpp",
-    "type_traits": "cpp"
+    "type_traits": "cpp",
+    "locale": "cpp"
   }
 }
