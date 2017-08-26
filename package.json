@@ -39,6 +39,7 @@
     "sdp-transform": "^2.3.0"
   },
   "devDependencies": {
+    "express": "^4.15.4",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-clang-format": "^1.0.23",
     "gulp-eslint": "^4.0.0",
@@ -46,7 +47,8 @@
     "gulp-replace": "^0.6.1",
     "gulp-shell": "^0.6.3",
     "gulp-touch-cmd": "0.0.1",
-    "tap": "^10.7.0"
+    "tap": "^10.7.0",
+    "ws": "^3.1.0"
   },
   "optionalDependencies": {
     "clang-tools-prebuilt": "^0.1.4"
