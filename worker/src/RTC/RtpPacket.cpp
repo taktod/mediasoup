@@ -5,6 +5,10 @@
 #include "../Logger.hpp"
 #include <cstring> // std::memcpy()
 
+#include <stdio.h>
+
+static int count = 0;
+
 namespace RTC
 {
 	/* Class methods. */
@@ -138,6 +142,15 @@ namespace RTC
 	{
 		MS_TRACE();
 
+		// とりあえずpayloadTypeで、保存するファイル名を設定するということでいいかな。
+		MS_DUMP("count:%d size:%d payloadLength:%d payloadPadding:%d", count, size, payloadLength, payloadPadding);
+		char file[256];
+		sprintf(file, "data/output-%d-%03d.bin", header->payloadType, count ++);
+		FILE *fp = fopen(file, "wb");
+		if(fp != 0) {
+			fwrite(payload, 1, size, fp);
+			fclose(fp);
+		}
 		if (this->header->csrcCount != 0u)
 			this->csrcList = reinterpret_cast<uint8_t*>(header) + sizeof(Header);
 	}
