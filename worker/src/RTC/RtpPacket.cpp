@@ -120,6 +120,8 @@ namespace RTC
 		               payloadLength + static_cast<size_t>(payloadPadding),
 		    "packet's computed size does not match received size");
 
+//	header->ssrc = 12345; // こっちを適当なものにするのかな
+//		extensionHeader->id = 12345; // とりあえず適当なものにかきかえちゃう。
 		auto packet = new RtpPacket(header, extensionHeader, payload, payloadLength, payloadPadding, len);
 
 		// Parse RFC 5285 extension header.
@@ -141,7 +143,8 @@ namespace RTC
 	      payloadLength(payloadLength), payloadPadding(payloadPadding), size(size)
 	{
 		MS_TRACE();
-
+//		MS_DUMP("ssrc:%d id:%d", header->ssrc, extensionHeader->id);
+/*
 		// とりあえずpayloadTypeで、保存するファイル名を設定するということでいいかな。
 		MS_DUMP("count:%d size:%d payloadLength:%d payloadPadding:%d", count, size, payloadLength, payloadPadding);
 		char file[256];
@@ -150,7 +153,7 @@ namespace RTC
 		if(fp != 0) {
 			fwrite(payload, 1, size, fp);
 			fclose(fp);
-		}
+		}*/
 		if (this->header->csrcCount != 0u)
 			this->csrcList = reinterpret_cast<uint8_t*>(header) + sizeof(Header);
 	}

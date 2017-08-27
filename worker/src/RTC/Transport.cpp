@@ -198,6 +198,16 @@ namespace RTC
 		// Create a DTLS agent.
 		this->dtlsTransport = new RTC::DtlsTransport(this);
 
+		// このタイミングでttLibCの初期化しとく
+		// なお、解放をちゃんとつくってないので、非常に危険なコードである。
+		h264Buffer = ttLibC_DynamicBuffer_make();
+		ttLibC_Frame_Type types[2];
+		types[0] = frameType_h264; // トラック1はh264
+		types[1] = frameType_opus; // トラック2はopus決め打ち
+		writer = ttLibC_MkvWriter_make_ex(types, 2, 1000);
+		writer->mode = 0x01; // 中間フレーム分割にしとく
+		fp = fopen("output.mkv", "wb"); // output.mkvで保存する
+
 		// Hack to avoid that Destroy() above attempts to delete this.
 		this->allocated = true;
 	}
@@ -774,6 +784,18 @@ namespace RTC
 		}
 	}
 
+// 書き込みのcallback
+static bool hoge_write(void *ptr, void *data, size_t data_size) {
+	MS_TRACE();
+	FILE *fp = (FILE *)ptr;
+	MS_DUMP("書き込みしたい");
+	if(fp != nullptr && data_size > 0) {
+		MS_DUMP("書き込みします。:%d", data_size);
+		fwrite(data, 1, data_size, fp);
+	}
+	return true;
+}
+
 	inline void Transport::OnRtpDataRecv(RTC::TransportTuple* tuple, const uint8_t* data, size_t len)
 	{
 		MS_TRACE();
@@ -833,6 +855,170 @@ namespace RTC
 			MS_WARN_TAG(rtp, "received data is not a valid RTP packet");
 
 			return;
+		}
+
+		// payloadTypeでトラックを見極める
+		switch(packet->GetPayloadType()) {
+		case 100: // opus
+			{
+				// こっちはそのまま取得すればOK
+				if(reuseOpus == nullptr) {
+					opusSpts = packet->GetTimestamp();
+				}
+				// binaryからopusオブジェクトを復元
+				reuseOpus = ttLibC_Opus_getFrame(
+					reuseOpus,
+					packet->GetPayload(),
+					packet->GetPayloadLength(),
+					true,
+					packet->GetTimestamp() - opusSpts,
+					48000);
+//				MS_DUMP("opus pts:%f", (reuseOpus->inherit_super.inherit_super.pts * 1.0f / reuseOpus->inherit_super.inherit_super.timebase));
+				// 第２トラックにするのでidを書き換え
+				reuseOpus->inherit_super.inherit_super.id = 2;
+				// 書き込み実施
+				ttLibC_MkvWriter_write(writer, (ttLibC_Frame *)reuseOpus, hoge_write, fp);
+			}
+			break;
+		case 112: // h264
+			{
+				if(reuseH264 == nullptr) {
+					h264Spts = packet->GetTimestamp();
+				}
+				// payloadの内容を確認してなにかしないといけない。
+				// payloadを確認する。
+				uint8_t *buffer = packet->GetPayload();
+				size_t buffer_size = packet->GetPayloadLength();
+				// 1byte目をみて、どういうSTAP-AとFU-Aの特殊処理をしないといけない模様
+				switch(buffer[0] & 0x1F) {
+				case 0:case 1:case 2:case 3:case 4:
+				case 5:case 6:case 7:case 8:case 9:
+				case 10:case 11:case 12:case 13:case 14:
+				case 15:case 16:case 17:case 18:case 19:
+				case 20:case 21:case 22:case 23:
+					// 普通のnal
+					{
+						// 既存のbufferを空にする
+						ttLibC_DynamicBuffer_empty(h264Buffer);
+						// annexBの00 00 00 01を追加
+						uint8_t data[4] = {0, 0, 0, 1};
+						ttLibC_DynamicBuffer_append(h264Buffer, data, 4);
+						// nalの実態いれる
+						ttLibC_DynamicBuffer_append(h264Buffer, packet->GetPayload(), packet->GetPayloadLength());
+						// binaryからh264オブジェクト復元
+						reuseH264 = ttLibC_H264_getFrame(
+							reuseH264,
+							ttLibC_DynamicBuffer_refData(h264Buffer),
+							ttLibC_DynamicBuffer_refSize(h264Buffer),
+							true,
+							packet->GetTimestamp() - h264Spts,
+							90000);
+						if(reuseH264 != nullptr) {
+//							MS_DUMP("nalType:%x %x %x", reuseH264->frame_type, reuseH264->type, reuseH264->inherit_super.type);
+							// トラック1に指定
+							reuseH264->inherit_super.inherit_super.id = 1;
+							// カキコ
+							ttLibC_MkvWriter_write(writer, (ttLibC_Frame *)reuseH264, hoge_write, fp);
+//							MS_DUMP("h264 pts:%f", (reuseH264->inherit_super.inherit_super.pts * 1.0f / reuseH264->inherit_super.inherit_super.timebase));
+						}
+					}
+					break;
+				case 24: // STAP-A
+					// 分解しなければならない
+					{
+						ttLibC_DynamicBuffer_empty(h264Buffer);
+						// 1byte目進む
+						buffer ++;
+						buffer_size --;
+						do {
+							// あとは2byte size そのサイズ分nalデータとなってる
+							int16_t size = 0;
+							if(buffer_size < 2) {
+								break;
+							}
+							// サイズ
+							size = (buffer[0] << 8) | (buffer[1]);
+							buffer += 2;
+							buffer_size -= 2;
+							if(size > buffer_size) {
+								break;
+							}
+							// 00 00 00 01をいれて
+							uint8_t data[4] = {0, 0, 0, 1};
+							ttLibC_DynamicBuffer_append(h264Buffer, data, 4);
+							// nal実態カキコ
+							ttLibC_DynamicBuffer_append(h264Buffer, buffer, size);
+							buffer += size;
+							buffer_size -= size;
+						} while(true);
+						// これでdynamicBufferの準備ができた。
+						// h264オブジェクト復元
+						reuseH264 = ttLibC_H264_getFrame(
+							reuseH264,
+							ttLibC_DynamicBuffer_refData(h264Buffer),
+							ttLibC_DynamicBuffer_refSize(h264Buffer),
+							true,
+							packet->GetTimestamp() - h264Spts,
+							90000);
+						if(reuseH264 != nullptr) {
+//							MS_DUMP("nalType:%x %x %x", reuseH264->frame_type, reuseH264->type, reuseH264->inherit_super.type);
+							// トラック1化
+							reuseH264->inherit_super.inherit_super.id = 1;
+							// カキコ
+							ttLibC_MkvWriter_write(writer, (ttLibC_Frame *)reuseH264, hoge_write, fp);
+//							MS_DUMP("h264 pts:%f", (reuseH264->inherit_super.inherit_super.pts * 1.0f / reuseH264->inherit_super.inherit_super.timebase));
+						}
+					}
+					break;
+				case 28: // FU-A
+					// こっちは複数のフレームで結合しなければならない。
+					{
+						bool isEnd = false;
+						// 2byte目をみて、nalの開始、終端判定、あとnalのtypeを知る必要あり
+						if((buffer[1] & 0x80) != 0x00) {
+							// 始まり
+							ttLibC_DynamicBuffer_empty(h264Buffer);
+							// annexBのやつ
+							uint8_t data[4] = {0, 0, 0, 1};
+							ttLibC_DynamicBuffer_append(h264Buffer, data, 4);
+							// nalType
+							uint8_t memo = (buffer[0] & 0xE0) | (buffer[1] & 0x1F);
+							ttLibC_DynamicBuffer_append(h264Buffer, &memo, 1);
+						}
+						else if((buffer[1] & 0x40) != 0x00) {
+							// 終端
+							isEnd = true;
+						}
+						// 実態コピー
+						ttLibC_DynamicBuffer_append(h264Buffer, buffer + 2, buffer_size - 2);
+						if(isEnd) {
+							// これでdynamicBufferの準備ができた。
+							// h264オブジェクト復元
+							reuseH264 = ttLibC_H264_getFrame(
+								reuseH264,
+								ttLibC_DynamicBuffer_refData(h264Buffer),
+								ttLibC_DynamicBuffer_refSize(h264Buffer),
+								true,
+								packet->GetTimestamp() - h264Spts,
+								90000);
+							if(reuseH264 != nullptr) {
+//								MS_DUMP("nalType:%x %x %x", reuseH264->frame_type, reuseH264->type, reuseH264->inherit_super.type);
+								// トラックは1
+								reuseH264->inherit_super.inherit_super.id = 1;
+								// カキコ
+								ttLibC_MkvWriter_write(writer, (ttLibC_Frame *)reuseH264, hoge_write, fp);
+//								MS_DUMP("h264 pts:%f", (reuseH264->inherit_super.inherit_super.pts * 1.0f / reuseH264->inherit_super.inherit_super.timebase));
+							}
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		default:
+			break;
 		}
 
 		// Get the associated RtpReceiver.

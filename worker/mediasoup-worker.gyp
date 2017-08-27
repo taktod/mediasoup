@@ -115,7 +115,8 @@
       '-lpthread',
       '-ldl',
       '-lsrtp2',
-      '-lpcap'
+      '-lpcap',
+      '-lttLibC'
     ],
     'conditions':
     [

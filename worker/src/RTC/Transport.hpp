@@ -23,6 +23,11 @@
 #include <string>
 #include <vector>
 
+#include <ttLibC/container/mkv.h>
+#include <ttLibC/frame/video/h264.h>
+#include <ttLibC/frame/audio/opus.h>
+#include <ttLibC/util/dynamicBufferUtil.h>
+
 namespace RTC
 {
 	class Transport : public RTC::UdpSocket::Listener,
@@ -153,6 +158,15 @@ namespace RTC
 		uint32_t maxBitrate{ 0 };
 		uint32_t effectiveMaxBitrate{ 0 };
 		uint64_t lastEffectiveMaxBitrateAt{ 0 };
+
+// とりあえずやってみるか・・・
+		ttLibC_Opus *reuseOpus{nullptr}; // 使い回すメモリーオブジェクト
+		ttLibC_H264 *reuseH264{nullptr};
+		ttLibC_DynamicBuffer *h264Buffer{nullptr}; // h264だけいろいろするので、dynamicBuffer使う
+		ttLibC_ContainerWriter *writer{nullptr}; // データの書き出し処理用
+		FILE *fp{nullptr}; // ファイル書き出し先
+		uint64_t opusSpts{0}; // 開始時のptsを保持しておいて、その分ずらして保存しなければならないだろう。
+		uint64_t h264Spts{0};
 	};
 
 	/* Inline instance methods. */
