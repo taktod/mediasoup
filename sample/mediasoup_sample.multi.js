@@ -18,7 +18,7 @@ console.log('websocket server start. port=' + wsPort);
 const express = require('express');
 const app = express();
 const webPort = 3000;
-app.use(express.static('public'));
+app.use(express.static('sample/public'));
 const webServer = app.listen(webPort, function(){
     console.log('Web server start. http://localhost:' + webServer.address().port + '/');
 });

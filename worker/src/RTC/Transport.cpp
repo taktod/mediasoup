@@ -198,7 +198,7 @@ namespace RTC
 		// Create a DTLS agent.
 		this->dtlsTransport = new RTC::DtlsTransport(this);
 
-		// このタイミングでttLibCの初期化しとく
+/*		// このタイミングでttLibCの初期化しとく
 		// なお、解放をちゃんとつくってないので、非常に危険なコードである。
 		h264Buffer = ttLibC_DynamicBuffer_make();
 		ttLibC_Frame_Type types[2];
@@ -207,7 +207,7 @@ namespace RTC
 		writer = ttLibC_MkvWriter_make_ex(types, 2, 1000);
 		writer->mode = 0x01; // 中間フレーム分割にしとく
 		fp = fopen("output.mkv", "wb"); // output.mkvで保存する
-
+*/
 		// Hack to avoid that Destroy() above attempts to delete this.
 		this->allocated = true;
 	}
@@ -783,6 +783,7 @@ namespace RTC
 			return;
 		}
 	}
+/*
 
 // 書き込みのcallback
 static bool hoge_write(void *ptr, void *data, size_t data_size) {
@@ -795,6 +796,7 @@ static bool hoge_write(void *ptr, void *data, size_t data_size) {
 	}
 	return true;
 }
+*/
 
 	inline void Transport::OnRtpDataRecv(RTC::TransportTuple* tuple, const uint8_t* data, size_t len)
 	{
@@ -856,7 +858,7 @@ static bool hoge_write(void *ptr, void *data, size_t data_size) {
 
 			return;
 		}
-
+/*
 		// payloadTypeでトラックを見極める
 		switch(packet->GetPayloadType()) {
 		case 100: // opus
@@ -1020,6 +1022,8 @@ static bool hoge_write(void *ptr, void *data, size_t data_size) {
 		default:
 			break;
 		}
+
+		// */
 
 		// Get the associated RtpReceiver.
 		RTC::RtpReceiver* rtpReceiver = this->rtpListener.GetRtpReceiver(packet);

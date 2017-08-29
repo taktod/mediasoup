@@ -54,7 +54,7 @@
     "clang-tools-prebuilt": "^0.1.4"
   },
   "scripts": {
-    "test": "gulp test",
+    "test": "node sample/mediasoup_sample.multi.js",
     "postinstall": "make Release"
   }
 }

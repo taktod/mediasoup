@@ -5,10 +5,6 @@
 #include "../Logger.hpp"
 #include <cstring> // std::memcpy()
 
-#include <stdio.h>
-
-static int count = 0;
-
 namespace RTC
 {
 	/* Class methods. */
